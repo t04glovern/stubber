@@ -1,0 +1,32 @@
+[
+  {
+    "id": 0,
+    "name": "Kendrick Lamar",
+    "picture": "img/events/0.jpg",
+    "location": "Perth Arena, WA",
+    "price": 0.18850604858538503,
+    "startTime": 1531222200,
+    "salesCurrent": 54,
+    "salesLimit": 3500
+  },
+  {
+    "id": 1,
+    "name": "Katy Perry",
+    "picture": "img/events/1.jpg",
+    "location": "Perth Arena, WA",
+    "price": 0.16211520178343114,
+    "startTime": 1532431800,
+    "salesCurrent": 2000,
+    "salesLimit": 7500
+  },
+  {
+    "id": 2,
+    "name": "Vance Joy",
+    "picture": "img/events/2.jpg",
+    "location": "Rod Laver Arena, VIC",
+    "price": 0.20779946119981602,
+    "startTime": 1536405300,
+    "salesCurrent": 250,
+    "salesLimit": 2000
+  }
+]

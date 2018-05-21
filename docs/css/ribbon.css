@@ -1,0 +1,78 @@
+/* Ribbon */
+.ribbon {
+    width: 100%;
+    margin: 10px auto;
+    padding: 10px 10px 0;
+    position: relative;
+    color: #512DA8;
+    background: #fff;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ribbon h4 {
+    display: block;
+    height: 40px;
+    line-height: 1.2;
+    width: 110%;
+    margin: 0;
+    padding: 5px 10px;
+    position: relative;
+    left: -16px;
+    top: 5px;
+    color: white;
+    text-shadow: 0 1px 1px #111111;
+    border-top: 1px solid #512DA8;
+    border-bottom: 1px solid #673AB7;
+    background: #673AB7;
+    background: linear-gradient(top, #673AB7 0%, #512DA8 100%);
+    border-radius: 2px 2px 0 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.ribbon h4::before,
+.ribbon h4::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: -11px;
+    z-index: -10;
+    border: 5px solid;
+    border-color: #673AB7 transparent transparent transparent;
+}
+
+.ribbon h4::before {
+    left: 0;
+}
+
+.ribbon h4::after {
+    right: 0;
+}
+
+/* Round */
+
+.ribbon.round h4 {
+    border-radius: 4px;
+}
+
+.ribbon.round h4::before,
+.ribbon.round h4::after {
+    width: 10px;
+    height: 10px;
+    bottom: -4px;
+    border: none;
+    border-radius: 10px;
+}
+
+.ribbon.round h4::before {
+    background: #673AB7;
+    background: linear-gradient(left, #673AB7 0%, #512DA8 100%);
+}
+
+.ribbon.round h4::after {
+    background: #673AB7;
+    background: linear-gradient(right, #673AB7 0%, #512DA8 100%);
+}

@@ -1,7 +1,7 @@
 {
   "name": "stubber",
   "version": "1.0.0",
-  "description": "Digitally tracable ticket sales on the blockchain",
+  "description": "Digitally traceable ticket sales on the blockchain",
   "main": "index.js",
   "repository": "https://github.com/t04glovern/stubber",
   "author": "Nathan Glover",
@@ -13,6 +13,14 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
     "babel-register": "^6.26.0",
+    "lite-server": "^2.3.0",
     "zeppelin-solidity": "^1.9.0"
+  },
+  "scripts": {
+    "dev": "lite-server",
+    "compile": "truffle compile",
+    "console": "truffle console",
+    "migrate": "truffle migrate --reset",
+    "deploy": "scripts/gh-pages.sh"
   }
 }

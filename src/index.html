@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Smart Contract system for animal rescue donations">
+  <meta name="author" content="Nathan Glover">
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <title>Stubber</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+    crossorigin="anonymous">
+
+  <!-- Custom styles for this template -->
+  <link href="css/ribbon.css" rel="stylesheet">
+  <link href="css/card.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
+
+  <!-- Fonts from Google Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+  <div id="headerwrap">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="centered outline">Stubber</h1>
+        </div>
+        <!-- /col-sm-6 -->
+      </div>
+      <!-- /row -->
+    </div>
+    <!-- /container -->
+  </div>
+  <!-- /headerwrap -->
+
+  <div class="card-container">
+    <div class="row mt centered">
+      <div class="col-sm-12">
+        <h1>Upcoming Events</h1>
+        <h4>View gigs that are coming up!</h4>
+      </div>
+    </div>
+    <!-- /row -->
+
+    <div id="card-row" class="row card-columns card-deck">
+      <!-- Event Load Here -->
+    </div>
+  </div>
+  <!-- /card-container -->
+
+  <div id="card-template" style="display: none;">
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+      <div class="ribbon">
+        <div class="card shadow-1">
+
+          <!-- Event Name -->
+          <h4 class="card-title event-name" style="display:inline-block" ;>Title</h4>
+          <!-- Event Image -->
+          <img class="card-img-top" src="img/events/0.jpg" style="width:100%">
+          <div class="card-block">
+            <!-- Event Location -->
+            <div class="card-text">
+              <a>Location: </a>
+              <small class="event-location"></small>
+            </div>
+            <hr>
+
+            <!-- Event Purchase Form -->
+            <form class="event-purchase">
+              <div class="form-group input-group">
+                <!-- Event Ticket Price -->
+                <text class="form-control event-price" type="number"></text>
+                <span class="input-group-addon">ETH</span>
+              </div>
+              <!-- /form-group -->
+              <div class="form-group input-group">
+                  <button class="btn btn-primary btn-purchase" type="submit" id="0" id="buttonEventPurchase">Purchase</button>
+                </div>
+            </form>
+            <!-- /form -->
+          </div>
+          <!-- /card-block -->
+
+          <div class="card-footer">
+            <!-- Event Ticket Sales Bar -->
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated event-sales-progress" role="progressbar" aria-valuemin="0"
+                aria-valuemax="100"></div>
+            </div>
+            <small class="text-muted event-sales-current">0</small>
+            <small class="text-muted"> / </small>
+            <small class="text-muted event-sales-limit">2000</small>
+            <small class="text-muted">Stubs</small>
+          </div>
+          <!-- /card-footer -->
+        </div>
+        <!-- /card -->
+      </div>
+      <!-- /ribbon -->
+    </div>
+    <!-- /col-lg-4 /col-md-6 /col-sm-12 -->
+  </div>
+
+  <div class="container">
+    <hr>
+  </div>
+  <!-- /container -->
+
+  <!-- ========= Bootsrap 4 - JavaScript ========= -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+    crossorigin="anonymous"></script>
+
+  <!-- ========= Local JavaScript ========= -->
+  <script src="js/lib/bignumber.js"></script>
+  <script src="js/lib/web3.min.js"></script>
+  <script src="js/lib/truffle-contract.min.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+
+</html>

@@ -1,4 +1,5 @@
 import assertRevert from "zeppelin-solidity/test/helpers/assertRevert";
+import ether from "zeppelin-solidity/test/helpers/ether";
 
 const StubToken = artifacts.require("StubToken");
 
@@ -14,11 +15,11 @@ contract("Stub token", accounts => {
       let instance = await StubToken.deployed();
       let owner = await instance.owner();
 
-      let token = await instance.mint(0, 1);
+      let token = await instance.mint(ether(1), ether(1));
 
       let tokens = await instance.tokenOfOwnerByIndex(owner, 0);
       let ticket = await instance.getTicket(tokens);
-      assert.deepEqual(ticket, [0, 1]);
+      assert.deepEqual(ticket, [ether(1), ether(1)]);
     });
 
     it("allows to mint only to owner", async () => {
@@ -26,7 +27,7 @@ contract("Stub token", accounts => {
       let other = accounts[1];
 
       await instance.transferOwnership(other);
-      await assertRevert(instance.mint(0, 1));
+      await assertRevert(instance.mint(ether(1), ether(1)));
     });
   });
 });
