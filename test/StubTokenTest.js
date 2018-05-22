@@ -11,15 +11,22 @@ contract("Stub token", accounts => {
   });
 
   describe("mint", () => {
-    it("creates token with specified eventId and price", async () => {
+    it("creates event and a ticket on that event", async () => {
       let instance = await StubToken.deployed();
       let owner = await instance.owner();
 
-      let token = await instance.mint(ether(1), ether(1));
+      let events = await instance.createEvent(
+        web3.fromAscii('Test'),
+        web3.fromAscii('Perth'),
+        ether(0.18850604858538503),
+        1531222200
+      )
+      let eventid = events.logs[0].args._eventId;
+      let token = await instance.mint(eventid, ether(0.18850604858538503));
 
       let tokens = await instance.tokenOfOwnerByIndex(owner, 0);
       let ticket = await instance.getTicket(tokens);
-      assert.deepEqual(ticket, [ether(1), ether(1)]);
+      assert.deepEqual(ticket, [eventid, ether(0.18850604858538503)]);
     });
 
     it("allows to mint only to owner", async () => {
