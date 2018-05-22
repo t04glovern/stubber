@@ -10,7 +10,7 @@ contract("Stub token", accounts => {
     assert.equal(owner, accounts[0]);
   });
 
-  describe("mint", () => {
+  describe("Event Creation and ticket assigning", () => {
     it("creates event and a ticket on that event", async () => {
       let instance = await StubToken.deployed();
       let owner = await instance.owner();
@@ -23,19 +23,29 @@ contract("Stub token", accounts => {
         3500
       )
       let eventid = events.logs[0].args._eventId;
-      let token = await instance.mint(eventid, ether(0.18850604858538503));
+      let token = await instance.purchaseTicket(eventid, {
+        value: ether(0.18850604858538503)
+      });
 
       let tokens = await instance.tokenOfOwnerByIndex(owner, 0);
       let ticket = await instance.getTicket(tokens);
       assert.deepEqual(ticket, [eventid, ether(0.18850604858538503)]);
     });
 
-    it("allows to mint only to owner", async () => {
+    it("allows event creation only to owner", async () => {
       let instance = await StubToken.deployed();
       let other = accounts[1];
 
       await instance.transferOwnership(other);
-      await assertRevert(instance.mint(ether(1), ether(1)));
+      await assertRevert(
+          instance.createEvent(
+          web3.fromAscii('Kendrick Lamar'),
+          web3.fromAscii('Perth Arena, WA'),
+          ether(0.18850604858538503),
+          1531222200,
+          3500
+        )
+      );
     });
   });
 });

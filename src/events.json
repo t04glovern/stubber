@@ -7,7 +7,7 @@
     "price": 0.18850604858538503,
     "startTime": 1531222200,
     "salesCurrent": 54,
-    "salesLimit": 3500
+    "salesLimit": 56000
   },
   {
     "id": 1,
@@ -17,7 +17,7 @@
     "price": 0.16211520178343114,
     "startTime": 1532431800,
     "salesCurrent": 2000,
-    "salesLimit": 7500
+    "salesLimit": 75000
   },
   {
     "id": 2,
@@ -27,6 +27,6 @@
     "price": 0.20779946119981602,
     "startTime": 1536405300,
     "salesCurrent": 250,
-    "salesLimit": 2000
+    "salesLimit": 20000
   }
 ]

@@ -53,7 +53,7 @@ function loadEventsFromJson() {
 
 var App = {
   contracts: {},
-  StubTokenAddress: '0x345ca3e014aaf5dca488057592ee47305d9b3e10',
+  StubTokenAddress: '0xBf81f8CB6d3869Ae73B281847bb83580F3F047b2',
 
   init() {
     //loadEventsFromJson();
@@ -144,7 +144,6 @@ var App = {
 
     // Get the form fields
     var eventId = parseInt($(event.target.elements).closest('.btn-purchase').data('id'));
-    var eventPrice = parseFloat($(event.target.elements)[0].value);
 
     let stubTokenInstance;
 
@@ -152,16 +151,17 @@ var App = {
       if (error) {
         console.log(error);
       }
-
       var account = accounts[0];
 
       let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
-      return stubTokenInstance.makePurchase(eventId, {
+      stubTokenInstance.priceOf(eventId).then((price) => {
+        return stubTokenInstance.purchaseTicket(eventId, {
         from: account,
-        value: web3.toWei(eventPrice, 'ether'),
+          value: price
       }).then(result => App.loadEvents()).catch((err) => {
         console.log(err.message);
       });
+    });
     });
   },
 

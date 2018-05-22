@@ -9,6 +9,10 @@
 
 This repository houses the Stubber ticket sale and management platform. It has been built using Ethereum smart contracts.
 
+## Networks
+
+- ropsten : [0xBf81f8CB6d3869Ae73B281847bb83580F3F047b2](https://ropsten.etherscan.io/address/0xbf81f8cb6d3869ae73b281847bb83580f3f047b2#code)
+
 ## Developing This Contract
 
 In order to develop this contract the following steps were taken to setup the environment.
@@ -37,6 +41,14 @@ The configuration for running the network locally using truffle is in the `truff
       network_id: "*" // Match any network id
     }
   }
+```
+
+### Changing the network Address
+
+To change the network address this Dapp connects to simple open up `src/js/app.js` and change the following line to point at your deployed verions of this repos contract
+
+```javascript
+  StubTokenAddress: '0xBf81f8CB6d3869Ae73B281847bb83580F3F047b2',
 ```
 
 ## Screenshots

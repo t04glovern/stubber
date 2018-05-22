@@ -48,14 +48,31 @@ contract StubToken is ERC721Token, Ownable {
         salesCap = _event.salesCap;
     }
 
-    function mint(uint _event, uint _price) public onlyOwner {
+    function purchaseTicket(uint _eventId) public payable {
+        Event memory _event = events[_eventId];
+        uint sellingPrice = _event.price;
+
+        require(_event.salesCap > totalEventSales[_eventId]);
+        require(msg.value >= sellingPrice);
+
         Ticket memory _ticket = Ticket({
-            eventId: _event,
-            price: _price
+            eventId: _eventId,
+            price: sellingPrice
         });
+
         uint _ticketId = tickets.push(_ticket) - 1;
-        totalEventSales[_event]++;
+        totalEventSales[_eventId]++;
         _mint(msg.sender, _ticketId);
+
+        uint excess = msg.value.sub(sellingPrice);
+        if (excess > 0) {
+            msg.sender.transfer(excess);
+        }
+    }
+
+    function priceOf(uint _eventId) public view returns (uint _price) {
+        Event memory _event = events[_eventId];
+        return _event.price;
     }
 
     function createEvent(bytes32 _name, bytes32 _location, uint _price, uint _time, uint _salesCap) public onlyOwner {
