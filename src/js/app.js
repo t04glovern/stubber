@@ -53,6 +53,7 @@ function loadEventsFromJson() {
 
 var App = {
   contracts: {},
+  StubTokenAddress: '0x345ca3e014aaf5dca488057592ee47305d9b3e10',
 
   init() {
     //loadEventsFromJson();
@@ -85,7 +86,7 @@ var App = {
   },
 
   loadEvents() {
-    web3.eth.getAccounts(function(err, accounts) {
+    web3.eth.getAccounts(function (err, accounts) {
       if (err != null) {
         console.error("An error occurred: " + err);
       } else if (accounts.length == 0) {
@@ -95,13 +96,8 @@ var App = {
         $('#card-row').children().remove();
       }
     });
-    let stubTokenInstance;
-
-    App.contracts.StubToken.deployed().then((instance) => {
-      stubTokenInstance = instance;
-
-      return stubTokenInstance.totalEventSupply.call();
-    }).then((supply) => {
+    let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
+    return totalSupply = stubTokenInstance.totalEventSupply().then((supply) => {
       for (var i = 0; i < supply; i++) {
         App.getEventDetails(i);
       }
@@ -111,13 +107,8 @@ var App = {
   },
 
   getEventDetails(eventId) {
-    let stubTokenInstance;
-
-    App.contracts.StubToken.deployed().then((instance) => {
-      stubTokenInstance = instance;
-
-      return stubTokenInstance.getEvent(eventId)
-    }).then((eventData) => {
+    let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
+    return stubTokenInstance.getEvent(eventId).then((eventData) => {
       var eventJson = {
         'id': eventId,
         'name': web3.toAscii(eventData[0]),
@@ -164,14 +155,10 @@ var App = {
 
       var account = accounts[0];
 
-      App.contracts.StubToken.deployed().then((instance) => {
-        stubTokenInstance = instance;
-
-        // Execute purchase as a transaction by sending account
-        return stubTokenInstance.makePurchase(eventId, {
-          from: account,
-          value: web3.toWei(eventPrice, 'ether'),
-        });
+      let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
+      return stubTokenInstance.makePurchase(eventId, {
+        from: account,
+        value: web3.toWei(eventPrice, 'ether'),
       }).then(result => App.loadEvents()).catch((err) => {
         console.log(err.message);
       });
@@ -197,14 +184,11 @@ var App = {
 
       var account = accounts[0];
 
-      App.contracts.StubToken.deployed().then((instance) => {
-        stubTokenInstance = instance;
+      let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
+      var ticketPrice = web3.toWei(eventPrice);
 
-        // Execute create event function
-        var ticketPrice = web3.toWei(eventPrice);
-        return stubTokenInstance.createEvent(eventName, eventLocation, ticketPrice, eventStart, eventCap, {
-          from: account,
-        });
+      return stubTokenInstance.createEvent(eventName, eventLocation, ticketPrice, eventStart, eventCap, {
+        from: account,
       }).then(result => App.loadEvents()).catch((err) => {
         console.log(err.message);
       });
