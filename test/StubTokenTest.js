@@ -16,10 +16,11 @@ contract("Stub token", accounts => {
       let owner = await instance.owner();
 
       let events = await instance.createEvent(
-        web3.fromAscii('Test'),
-        web3.fromAscii('Perth'),
+        web3.fromAscii('Kendrick Lamar'),
+        web3.fromAscii('Perth Arena, WA'),
         ether(0.18850604858538503),
-        1531222200
+        1531222200,
+        3500
       )
       let eventid = events.logs[0].args._eventId;
       let token = await instance.mint(eventid, ether(0.18850604858538503));

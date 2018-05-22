@@ -87,8 +87,8 @@
               </div>
               <!-- /form-group -->
               <div class="form-group input-group">
-                  <button class="btn btn-primary btn-purchase" type="submit" id="0" id="buttonEventPurchase">Purchase</button>
-                </div>
+                <button class="btn btn-primary btn-purchase" type="submit" id="0" id="buttonEventPurchase">Purchase</button>
+              </div>
             </form>
             <!-- /form -->
           </div>
@@ -116,6 +116,83 @@
 
   <div class="container">
     <hr>
+  </div>
+  <!-- /container -->
+
+  <div class="container" id="kitty-create">
+    <div class="row mt centered">
+      <div class="col-lg-12">
+        <h1>Host an Event?</h1>
+        <h4>Add a new Event to the system!</h4>
+      </div>
+    </div>
+    <!-- /row -->
+
+    <div class="row mt centered">
+
+      <div class="col-lg-12">
+        <form class="event-create">
+          <div class="form-group row">
+            <label for="inputEventName" class="col-sm-4 col-form-label">Event Name</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <input type="text" class="form-control" id="inputEventName" placeholder="Event / Tour Name">
+              </div>
+            </div>
+          </div>
+          <!-- /form-group -->
+          <div class="form-group row">
+            <label for="inputEventLocation" class="col-sm-4 col-form-label">Event Location</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="inputEventLocation" placeholder="City / Theatre location">
+            </div>
+          </div>
+          <!-- /form-group -->
+          <div class="form-group row">
+            <label for="inputTicketPrice" class="col-sm-4 col-form-label">Ticket Price</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <input type="text" class="form-control" id="inputTicketPrice" placeholder="0.002">
+                <span class="input-group-addon">ETH</span>
+              </div>
+            </div>
+          </div>
+          <!-- /form-group -->
+          <div class="form-group row">
+            <label for="inputEventStart" class="col-sm-4 col-form-label">Event Start</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <input type="text" class="form-control" id="inputEventStart" placeholder="1531000200">
+                <span class="input-group-addon">EPOCH</span>
+              </div>
+            </div>
+          </div>
+          <!-- /form-group -->
+          <div class="form-group row">
+            <label for="inputSalesCap" class="col-sm-4 col-form-label">Ticket Sales Cap</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <input type="text" class="form-control" id="inputSalesCap" placeholder="56000">
+                <span class="input-group-addon">TICKETS</span>
+              </div>
+            </div>
+          </div>
+          <!-- /form-group -->
+          <div class="form-group row">
+            <label for="eventCreateButton" class="col-sm-4 col-form-label"></label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <button class="btn btn-primary" type="submit" id="eventCreateButton">Create New Event!</button>
+              </div>
+            </div>
+          </div>
+          <!-- /form-group -->
+        </form>
+        <!-- /form -->
+      </div>
+      <!-- /col-lg-8 -->
+    </div>
+    <!-- /row -->
   </div>
   <!-- /container -->
 

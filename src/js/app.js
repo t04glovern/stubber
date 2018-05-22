@@ -15,7 +15,7 @@ function loadEvent(
   cardTemplate.find('.event-name').text(eventName);
   cardTemplate.find('.card-img-top').attr('src', eventPicture);
   cardTemplate.find('.event-location').text(eventLocation);
-  cardTemplate.find('.event-price').text(parseFloat(eventPrice).toFixed(4));
+  cardTemplate.find('.event-price').text(eventPrice.toFixed(4));
   cardTemplate.find('.btn-purchase').attr('id', eventId);
   cardTemplate.find('.event-sales-current').text(eventSalesCurrent);
   cardTemplate.find('.event-sales-limit').text(eventSalesLimit);
@@ -35,7 +35,7 @@ function loadEvent(
 
 /** Using the json definitions, load in sample events */
 function loadEventsFromJson() {
-  $.getJSON('events.json', (data) => {    
+  $.getJSON('events.json', (data) => {
     for (var i = 0; i < data.length; i++) {
       loadEvent(
         data[i].id,
@@ -55,7 +55,7 @@ var App = {
   contracts: {},
 
   init() {
-    loadEventsFromJson();
+    //loadEventsFromJson();
     return App.initWeb3();
   },
 
@@ -66,7 +66,7 @@ var App = {
       // set the provider you want from Web3.providers
       web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
-    //return App.initContract();
+    return App.initContract();
   },
 
   initContract() {
@@ -85,15 +85,25 @@ var App = {
   },
 
   loadEvents() {
+    web3.eth.getAccounts(function(err, accounts) {
+      if (err != null) {
+        console.error("An error occurred: " + err);
+      } else if (accounts.length == 0) {
+        console.log("User is not logged in to MetaMask");
+      } else {
+        // Remove existing cards
+        $('#card-row').children().remove();
+      }
+    });
     let stubTokenInstance;
 
     App.contracts.StubToken.deployed().then((instance) => {
       stubTokenInstance = instance;
 
-      return stubTokenInstance.getEvents.call();
-    }).then((events) => {
-      for (var i = 0; i < events.length; i++) {
-        App.getEventDetails(events[i]);
+      return stubTokenInstance.totalEventSupply.call();
+    }).then((supply) => {
+      for (var i = 0; i < supply; i++) {
+        App.getEventDetails(i);
       }
     }).catch((err) => {
       console.log(err.message);
@@ -106,16 +116,16 @@ var App = {
     App.contracts.StubToken.deployed().then((instance) => {
       stubTokenInstance = instance;
 
-      return stubTokenInstance.getEvent(eventId);
-    }).then((event) => {
+      return stubTokenInstance.getEvent(eventId)
+    }).then((eventData) => {
       var eventJson = {
-        'id': eventId.toNumber(),
-        'name': event[0],
-        'location': event[1],
-        'price': event[2],
-        'startTime': event[3],
-        'salesCurrent': event[4].toNumber(),
-        'salesLimit': event[5].toNumber()
+        'id': eventId,
+        'name': web3.toAscii(eventData[0]),
+        'location': web3.toAscii(eventData[1]),
+        'price': web3.fromWei(eventData[2]),
+        'startTime': eventData[3],
+        'salesCurrent': eventData[4].toNumber(),
+        'salesLimit': eventData[5].toNumber()
       };
       loadEvent(
         eventJson.id,
@@ -135,6 +145,7 @@ var App = {
   /** Event Bindings for Form submits */
   bindEvents() {
     $(document).on('submit', 'form.event-purchase', App.handlePurchase);
+    $(document).on('submit', 'form.event-create', App.handleCreateEvent);
   },
 
   handlePurchase(event) {
@@ -160,6 +171,39 @@ var App = {
         return stubTokenInstance.makePurchase(eventId, {
           from: account,
           value: web3.toWei(eventPrice, 'ether'),
+        });
+      }).then(result => App.loadEvents()).catch((err) => {
+        console.log(err.message);
+      });
+    });
+  },
+
+  handleCreateEvent(event) {
+    event.preventDefault();
+
+    // Get the form fields
+    var eventName = $(event.target.elements)[0].value;
+    var eventLocation = $(event.target.elements)[1].value;
+    var eventPrice = parseFloat($(event.target.elements)[2].value);
+    var eventStart = $(event.target.elements)[3].value;
+    var eventCap = $(event.target.elements)[4].value;
+
+    let stubTokenInstance;
+
+    web3.eth.getAccounts((error, accounts) => {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+
+      App.contracts.StubToken.deployed().then((instance) => {
+        stubTokenInstance = instance;
+
+        // Execute create event function
+        var ticketPrice = web3.toWei(eventPrice);
+        return stubTokenInstance.createEvent(eventName, eventLocation, ticketPrice, eventStart, eventCap, {
+          from: account,
         });
       }).then(result => App.loadEvents()).catch((err) => {
         console.log(err.message);
