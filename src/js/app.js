@@ -15,6 +15,8 @@ function loadEvent(
   cardTemplate.find('.event-name').text(eventName);
   cardTemplate.find('.card-img-top').attr('src', eventPicture);
   cardTemplate.find('.event-location').text(eventLocation);
+  cardTemplate.find('.event-location').attr("href", "https://maps.google.com/?q=" + eventLocation.replace(/\0.*$/g,''));
+  cardTemplate.find('.event-start-time').text(EpochToDate(eventStartTime));
   cardTemplate.find('.event-price').text(eventPrice.toFixed(4));
   cardTemplate.find('.btn-purchase').attr('data-id', eventId);
   cardTemplate.find('.event-sales-current').text(eventSalesCurrent);
@@ -41,6 +43,19 @@ function loadTicket(ticketId, eventId, ticketPrice) {
   ticketRow += '<td>' + eventId + '</td>';
   ticketRow += '<td>' + ticketPrice + '</td></tr>';
   ticketTable.append(ticketRow);
+}
+
+/** Epoch */
+function Epoch(date) {
+  return Math.round(new Date(date).getTime() / 1000.0);
+}
+
+/** Epoch To Date */
+function EpochToDate(epoch) {
+  if (epoch < 10000000000)
+      epoch *= 1000; // convert to milliseconds (Epoch is usually expressed in seconds, but Javascript uses Milliseconds)
+  var epoch = epoch + (new Date().getTimezoneOffset() * -1); //for timeZone        
+  return new Date(epoch);
 }
 
 /** Using the json definitions, load in sample events */
