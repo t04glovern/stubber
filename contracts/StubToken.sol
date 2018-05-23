@@ -30,6 +30,7 @@ contract StubToken is ERC721Token, Ownable {
     Event[] public events;
 
     mapping (uint => uint) private totalEventSales;
+    mapping (address => uint) private totalOwnedTickets;
     mapping (uint => uint) private eventRevenue;
 
     modifier onlyArtist(uint _eventId) {
@@ -103,8 +104,9 @@ contract StubToken is ERC721Token, Ownable {
         });
 
         uint _ticketId = tickets.push(_ticket) - 1;
-        totalEventSales[_eventId]++;
         _mint(msg.sender, _ticketId);
+        totalEventSales[_eventId]++;
+        totalOwnedTickets[msg.sender]++;
 
         uint excess = msg.value.sub(sellingPrice);
         eventRevenue[_eventId] += sellingPrice;
@@ -118,6 +120,24 @@ contract StubToken is ERC721Token, Ownable {
     function priceOf(uint _eventId) public view returns (uint _price) {
         Event memory _event = events[_eventId];
         return _event.price;
+    }
+
+    /// @dev Get the ID's of the tickets owned by someone
+    /// @param _owner Address of someone
+    function ticketsOf(address _owner) public view returns(uint[]) {
+        uint tokenCount = totalOwnedTickets[_owner];
+        if (tokenCount == 0) {
+            return new uint[](0);
+        } else {
+            uint[] memory result = new uint[](tokenCount);
+            uint resultIndex = 0;
+
+            for (uint i = 0; i < tokenCount; i++) {
+                result[resultIndex] = tokenOfOwnerByIndex(_owner, i);
+                resultIndex++;
+            }
+            return result;
+        }
     }
 
     /// @dev Gets the total number of events for enumeration purposes

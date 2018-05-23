@@ -89,7 +89,7 @@
               </div>
               <!-- /form-group -->
               <div class="form-group input-group">
-                <button class="btn btn-primary btn-purchase" type="submit" id="0" id="buttonEventPurchase">Purchase</button>
+                <button class="btn btn-primary btn-purchase" type="submit" data-id="0" id="buttonEventPurchase">Purchase</button>
               </div>
             </form>
             <!-- /form -->
@@ -215,16 +215,13 @@
     <table class="table">
       <thead>
         <tr>
+          <th>Ticket #</th>
           <th>Event #</th>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Time</th>
+          <th>Price Paid (ETH)</th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="event-tickets">
-          <!-- Table contents -->
-        </tr>
+      <tbody id="event-tickets">
+        <!-- Table contents -->
       </tbody>
     </table>
     </div>
