@@ -15,7 +15,7 @@ function loadEvent(
   cardTemplate.find('.event-name').text(eventName);
   cardTemplate.find('.card-img-top').attr('src', eventPicture);
   cardTemplate.find('.event-location').text(eventLocation);
-  cardTemplate.find('.event-location').attr("href", "https://maps.google.com/?q=" + eventLocation.replace(/\0.*$/g,''));
+  cardTemplate.find('.event-location').attr("href", "https://maps.google.com/?q=" + eventLocation);
   cardTemplate.find('.event-start-time').text(EpochToDate(eventStartTime));
   cardTemplate.find('.event-price').text(eventPrice.toFixed(4));
   cardTemplate.find('.btn-purchase').attr('data-id', eventId);
@@ -177,8 +177,9 @@ var App = {
     return stubTokenInstance.getEvent(eventId).then((eventData) => {
       var eventJson = {
         'id': eventId,
-        'name': web3.toAscii(eventData[1]),
-        'location': web3.toAscii(eventData[2]),
+        'artist': eventData[0],
+        'name': web3.toAscii(eventData[1]).replace(/\0.*$/g,''),
+        'location': web3.toAscii(eventData[2]).replace(/\0.*$/g,''),
         'price': web3.fromWei(eventData[3]),
         'startTime': eventData[4],
         'salesCurrent': eventData[5].toNumber(),
