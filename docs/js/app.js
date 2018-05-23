@@ -15,8 +15,10 @@ function loadEvent(
   cardTemplate.find('.event-name').text(eventName);
   cardTemplate.find('.card-img-top').attr('src', eventPicture);
   cardTemplate.find('.event-location').text(eventLocation);
+  cardTemplate.find('.event-location').attr("href", "https://maps.google.com/?q=" + eventLocation);
+  cardTemplate.find('.event-start-time').text(EpochToDate(eventStartTime));
   cardTemplate.find('.event-price').text(eventPrice.toFixed(4));
-  cardTemplate.find('.btn-purchase').attr('id', eventId);
+  cardTemplate.find('.btn-purchase').attr('data-id', eventId);
   cardTemplate.find('.event-sales-current').text(eventSalesCurrent);
   cardTemplate.find('.event-sales-limit').text(eventSalesLimit);
 
@@ -31,6 +33,29 @@ function loadEvent(
   }
 
   cardRow.append(cardTemplate.html());
+}
+
+/** Populate ticket table */
+function loadTicket(ticketId, eventId, ticketPrice) {
+  const ticketTable = $('#event-tickets');
+  var ticketRow = '<tr>';
+  ticketRow += '<td>' + ticketId + '</td>';
+  ticketRow += '<td>' + eventId + '</td>';
+  ticketRow += '<td>' + ticketPrice + '</td></tr>';
+  ticketTable.append(ticketRow);
+}
+
+/** Epoch */
+function Epoch(date) {
+  return Math.round(new Date(date).getTime() / 1000.0);
+}
+
+/** Epoch To Date */
+function EpochToDate(epoch) {
+  if (epoch < 10000000000)
+      epoch *= 1000; // convert to milliseconds (Epoch is usually expressed in seconds, but Javascript uses Milliseconds)
+  var epoch = epoch + (new Date().getTimezoneOffset() * -1); //for timeZone        
+  return new Date(epoch);
 }
 
 /** Using the json definitions, load in sample events */
@@ -53,7 +78,7 @@ function loadEventsFromJson() {
 
 var App = {
   contracts: {},
-  StubTokenAddress: '0xBf81f8CB6d3869Ae73B281847bb83580F3F047b2',
+  StubTokenAddress: '0xd6C05E9a19128033D939232512c25e2420d231A6',
 
   init() {
     //loadEventsFromJson();
@@ -101,6 +126,47 @@ var App = {
       for (var i = 0; i < supply; i++) {
         App.getEventDetails(i);
       }
+      App.loadTickets();
+    }).catch((err) => {
+      console.log(err.message);
+    });
+  },
+
+  loadTickets() {
+    web3.eth.getAccounts(function (err, accounts) {
+      if (err != null) {
+        console.error("An error occurred: " + err);
+      } else if (accounts.length == 0) {
+        console.log("User is not logged in to MetaMask");
+      } else {
+        // Remove existing ticket items
+        $('#event-tickets').children().remove();
+      }
+    });
+    var address = web3.eth.defaultAccount;
+    let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
+    return totalSupply = stubTokenInstance.ticketsOf(address).then((tickets) => {
+      for (var i = 0; i < tickets.length; i++) {
+        App.addTicketDetails(tickets[i]);
+      }
+    }).catch((err) => {
+      console.log(err.message);
+    });
+  },
+
+  addTicketDetails(ticketId) {
+    let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
+    return stubTokenInstance.getTicket(ticketId).then((ticketData) => {
+      var ticketJson = {
+        'id': ticketId,
+        'event': ticketData[0],
+        'price': web3.fromWei(ticketData[1])
+      };
+      loadTicket(
+        ticketJson.id,
+        ticketJson.event,
+        ticketJson.price
+      );
     }).catch((err) => {
       console.log(err.message);
     });
@@ -111,12 +177,13 @@ var App = {
     return stubTokenInstance.getEvent(eventId).then((eventData) => {
       var eventJson = {
         'id': eventId,
-        'name': web3.toAscii(eventData[0]),
-        'location': web3.toAscii(eventData[1]),
-        'price': web3.fromWei(eventData[2]),
-        'startTime': eventData[3],
-        'salesCurrent': eventData[4].toNumber(),
-        'salesLimit': eventData[5].toNumber()
+        'artist': eventData[0],
+        'name': web3.toAscii(eventData[1]).replace(/\0.*$/g,''),
+        'location': web3.toAscii(eventData[2]).replace(/\0.*$/g,''),
+        'price': web3.fromWei(eventData[3]),
+        'startTime': eventData[4],
+        'salesCurrent': eventData[5].toNumber(),
+        'salesLimit': eventData[6].toNumber()
       };
       loadEvent(
         eventJson.id,
@@ -156,7 +223,7 @@ var App = {
       let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
       stubTokenInstance.priceOf(eventId).then((price) => {
         return stubTokenInstance.purchaseTicket(eventId, {
-        from: account,
+          from: account,
           value: price
       }).then(result => App.loadEvents()).catch((err) => {
         console.log(err.message);
@@ -187,7 +254,7 @@ var App = {
       let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
       var ticketPrice = web3.toWei(eventPrice);
 
-      return stubTokenInstance.createEvent(eventName, eventLocation, ticketPrice, eventStart, eventCap, {
+      return stubTokenInstance.createEvent(account, eventName, eventLocation, ticketPrice, eventStart, eventCap, {
         from: account,
       }).then(result => App.loadEvents()).catch((err) => {
         console.log(err.message);

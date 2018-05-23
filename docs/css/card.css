@@ -32,8 +32,14 @@
 }
 
 .card-text {
-    color: #636c72;
+    color: #aa63fc;
     font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.card-text small {
+    color: #636c72;
+    font-weight: 400;
     font-size: 0.9rem;
 }
 

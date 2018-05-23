@@ -76,7 +76,12 @@
             <!-- Event Location -->
             <div class="card-text">
               <a>Location: </a>
-              <small class="event-location"></small>
+              <a class="event-location" href="" target="_blank"></a>
+            </div>
+            <!-- Event Location -->
+            <div class="card-text">
+              <a>Date: </a>
+              <small class="event-start-time"></small>
             </div>
             <hr>
 
@@ -89,7 +94,7 @@
               </div>
               <!-- /form-group -->
               <div class="form-group input-group">
-                <button class="btn btn-primary btn-purchase" type="submit" id="0" id="buttonEventPurchase">Purchase</button>
+                <button class="btn btn-primary btn-purchase" type="submit" data-id="0" id="buttonEventPurchase">Purchase</button>
               </div>
             </form>
             <!-- /form -->
@@ -121,6 +126,35 @@
   </div>
   <!-- /container -->
 
+  <div class="container">
+    <div class="row mt centered">
+      <div class="col-lg-12">
+        <h1>Your Tickets</h1>
+        <h4>Here's a list of your tickets!</h4>
+      </div>
+    </div>
+    <!-- /row -->                                                                                 
+    <div class="table-responsive table-striped">          
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Ticket #</th>
+          <th>Event #</th>
+          <th>Price Paid (ETH)</th>
+        </tr>
+      </thead>
+      <tbody id="event-tickets">
+        <!-- Table contents -->
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="container">
+      <hr>
+    </div>
+    <!-- /container -->
+  
   <div class="container" id="kitty-create">
     <div class="row mt centered">
       <div class="col-lg-12">
@@ -211,6 +245,17 @@
   <script src="js/lib/web3.min.js"></script>
   <script src="js/lib/truffle-contract.min.js"></script>
   <script src="js/app.js"></script>
+
+  <!-- ========= Global site tag (gtag.js) - Google Analytics ========= -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-71336829-18"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+		gtag('config', 'UA-71336829-18');
+	</script>
 
 </body>
 
