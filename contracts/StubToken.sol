@@ -18,6 +18,7 @@ contract StubToken is ERC721Token, Ownable {
     }
 
     struct Event {
+        address artist;
         bytes32 name;
         bytes32 location;
         uint price;
@@ -29,17 +30,36 @@ contract StubToken is ERC721Token, Ownable {
     Event[] public events;
 
     mapping (uint => uint) private totalEventSales;
+    mapping (uint => uint) private eventRevenue;
 
+    modifier onlyArtist(uint _eventId) {
+        Event memory _event = events[_eventId];
+        require(msg.sender == _event.artist);
+        _;
+    }
+
+    /// @dev Returns the general ticket details for a given ticket ID
+    /// @param _ticketId ID of the ticket (ERC721 token)
     function getTicket(uint _ticketId) public view returns(uint eventId, uint price) {
         Ticket memory _ticket = tickets[_ticketId];
-
         eventId = _ticket.eventId;
         price = _ticket.price;
     }
 
-    function getEvent(uint _eventId) public view returns(bytes32 name, bytes32 location, uint price, uint time, uint sales, uint salesCap) {
+    /// @dev Returns the event for a given event ID
+    /// @param _eventId ID of the event
+    function getEvent(uint _eventId) public view returns(
+            address artist, 
+            bytes32 name, 
+            bytes32 location, 
+            uint price, 
+            uint time, 
+            uint sales, 
+            uint salesCap
+        ) {
         Event memory _event = events[_eventId];
 
+        artist = _event.artist;
         name = _event.name;
         location = _event.location;
         price = _event.price;
@@ -48,6 +68,28 @@ contract StubToken is ERC721Token, Ownable {
         salesCap = _event.salesCap;
     }
 
+    /// @dev Used to create a new Event
+    /// @param _artist Address of the artist to recieve the funds
+    /// @param _name Name of the event (32 Character limit)
+    /// @param _location Name of the location for the event (32 Character limit)
+    /// @param _price Ticket price for the event
+    /// @param _time Timestamp in Epoch for the event
+    /// @param _salesCap Number of tickets allowed to be sold for the event
+    function createEvent(address _artist, bytes32 _name, bytes32 _location, uint _price, uint _time, uint _salesCap) public onlyOwner {
+        Event memory _event = Event({
+            artist: _artist,
+            name: _name,
+            location: _location,
+            price: _price,
+            time: _time,
+            salesCap: _salesCap
+        });
+        uint _eventId = events.push(_event) - 1;
+        emit NewEvent(_eventId);
+    }
+
+    /// @dev Used to purchase a ticket for a given event
+    /// @param _eventId ID of the event
     function purchaseTicket(uint _eventId) public payable {
         Event memory _event = events[_eventId];
         uint sellingPrice = _event.price;
@@ -65,29 +107,37 @@ contract StubToken is ERC721Token, Ownable {
         _mint(msg.sender, _ticketId);
 
         uint excess = msg.value.sub(sellingPrice);
+        eventRevenue[_eventId] += sellingPrice;
         if (excess > 0) {
             msg.sender.transfer(excess);
         }
     }
 
+    /// @dev Used to get the price of a given ticket
+    /// @param _eventId ID of the event
     function priceOf(uint _eventId) public view returns (uint _price) {
         Event memory _event = events[_eventId];
         return _event.price;
     }
 
-    function createEvent(bytes32 _name, bytes32 _location, uint _price, uint _time, uint _salesCap) public onlyOwner {
-        Event memory _event = Event({
-            name: _name,
-            location: _location,
-            price: _price,
-            time: _time,
-            salesCap: _salesCap
-        });
-        uint _eventId = events.push(_event) - 1;
-        emit NewEvent(_eventId);
-    }
-
+    /// @dev Gets the total number of events for enumeration purposes
     function totalEventSupply() public view returns (uint256 _totalSupply) {
         _totalSupply = events.length;
+    }
+
+    /// @dev Returns the balance value for an event
+    function withdrawBalance(uint _eventId) public onlyArtist(_eventId) {
+        Event memory _event = events[_eventId];
+        uint amount = eventRevenue[_eventId];
+        address to = _event.artist;
+
+        require(amount <= address(this).balance);
+        eventRevenue[_eventId] = 0; // Empty event revenue
+
+        if (to == address(0)) {
+            owner.transfer(amount); // funds are put into owners wallet IF event was created wrong
+        } else {
+            to.transfer(amount);
+        }
     }
 }

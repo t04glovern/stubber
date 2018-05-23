@@ -16,11 +16,12 @@ contract("Stub token", accounts => {
       let owner = await instance.owner();
 
       let events = await instance.createEvent(
+        owner,
         web3.fromAscii('Kendrick Lamar'),
         web3.fromAscii('Perth Arena, WA'),
         ether(0.18850604858538503),
         1531222200,
-        3500
+        20
       )
       let eventid = events.logs[0].args._eventId;
       let token = await instance.purchaseTicket(eventid, {
@@ -30,6 +31,8 @@ contract("Stub token", accounts => {
       let tokens = await instance.tokenOfOwnerByIndex(owner, 0);
       let ticket = await instance.getTicket(tokens);
       assert.deepEqual(ticket, [eventid, ether(0.18850604858538503)]);
+
+      let withdraw = await instance.withdrawBalance(eventid);
     });
 
     it("allows event creation only to owner", async () => {
@@ -38,7 +41,8 @@ contract("Stub token", accounts => {
 
       await instance.transferOwnership(other);
       await assertRevert(
-          instance.createEvent(
+        instance.createEvent(
+          other,
           web3.fromAscii('Kendrick Lamar'),
           web3.fromAscii('Perth Arena, WA'),
           ether(0.18850604858538503),

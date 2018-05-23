@@ -33,6 +33,17 @@ function loadEvent(
   cardRow.append(cardTemplate.html());
 }
 
+/** Populate ticket table */
+function loadTickets(eventId, eventName, eventLocation, eventTime) {
+  const ticketTable = $('.event-tickets');
+  var ticketRow = '';
+  ticketRow += '<td>' + eventId + '</td>';
+  ticketRow += '<td>' + eventName + '</td>';
+  ticketRow += '<td>' + eventLocation + '</td>';
+  ticketRow += '<td>' + eventTime + '</td>';
+  ticketTable.append(ticketRow);
+}
+
 /** Using the json definitions, load in sample events */
 function loadEventsFromJson() {
   $.getJSON('events.json', (data) => {
