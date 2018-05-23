@@ -26,7 +26,37 @@
     "location": "Rod Laver Arena, VIC",
     "price": 0.20779946119981602,
     "startTime": 1536405300,
-    "salesCurrent": 250,
+    "salesCurrent": 4000,
     "salesLimit": 20000
+  },
+  {
+    "id": 3,
+    "name": "Chvrches",
+    "picture": "img/events/3.jpg",
+    "location": "Hordern Pavilion, NSW",
+    "price": 0.17600891370359487,
+    "startTime": 1532259000,
+    "salesCurrent": 2,
+    "salesLimit": 13000
+  },
+  {
+    "id": 4,
+    "name": "Queens of the Stone Age",
+    "picture": "img/events/4.jpg",
+    "location": "Riverstage Brisbane, QLD",
+    "price": 0.2464124791850328,
+    "startTime": 1535448600,
+    "salesCurrent": 233,
+    "salesLimit": 45000
+  },
+  {
+    "id": 5,
+    "name": "Mariah Carey",
+    "picture": "img/events/5.jpg",
+    "location": "Rod Laver Arena, VIC",
+    "price": 0.4914168870604369,
+    "startTime": 1539171000,
+    "salesCurrent": 5600,
+    "salesLimit": 85000
   }
 ]

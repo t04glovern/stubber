@@ -29,6 +29,11 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
+.header-text {
+    font-weight: 1000 !important;
+    font-size: 6rem !important;
+}
+
 .centered {
     text-align: center;
 }
