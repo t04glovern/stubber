@@ -69,6 +69,23 @@ contract StubToken is ERC721Token, Ownable {
         salesCap = _event.salesCap;
     }
 
+    function getTicketDetails(uint _ticketId) public view returns(
+            address artist, 
+            bytes32 name, 
+            bytes32 location, 
+            uint price, 
+            uint time
+        ) {
+        Ticket memory _ticket = tickets[_ticketId];
+        Event memory _event = events[_ticket.eventId];
+
+        artist = _event.artist;
+        name = _event.name;
+        location = _event.location;
+        price = _event.price;
+        time = _event.time;
+    }
+
     /// @dev Used to create a new Event
     /// @param _artist Address of the artist to recieve the funds
     /// @param _name Name of the event (32 Character limit)

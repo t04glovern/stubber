@@ -36,12 +36,15 @@ function loadEvent(
 }
 
 /** Populate ticket table */
-function loadTicket(ticketId, eventId, ticketPrice) {
+function loadTicket(ticketId, eventName, eventLocation, ticketPrice, eventTime, eventArtist) {
   const ticketTable = $('#event-tickets');
   var ticketRow = '<tr>';
   ticketRow += '<td>' + ticketId + '</td>';
-  ticketRow += '<td>' + eventId + '</td>';
-  ticketRow += '<td>' + ticketPrice + '</td></tr>';
+  ticketRow += '<td>' + eventName + '</td>';
+  ticketRow += '<td><a href="https://maps.google.com/?q=' + eventLocation + '">' + eventLocation + '</a></td>';
+  ticketRow += '<td>' + EpochToDate(eventTime).toDateString().slice(0,15) + '</td>';
+  ticketRow += '<td>' + ticketPrice.toFixed(4) + '</td>';
+  ticketRow += '<td><a href="https://ropsten.etherscan.io/address/' + eventArtist + '">' + eventArtist.slice(0,8) + '...</a></td>';
   ticketTable.append(ticketRow);
 }
 
@@ -78,7 +81,7 @@ function loadEventsFromJson() {
 
 var App = {
   contracts: {},
-  StubTokenAddress: '0x21e578b253c73Ef7172F13B5C002c2F562521Ed5',
+  StubTokenAddress: '0x045d28dc903e9f3bb8e161eea5a78c0ce0777aa3',
 
   init() {
     //loadEventsFromJson();
@@ -156,16 +159,22 @@ var App = {
 
   addTicketDetails(ticketId) {
     let stubTokenInstance = App.contracts.StubToken.at(App.StubTokenAddress);
-    return stubTokenInstance.getTicket(ticketId).then((ticketData) => {
+    return stubTokenInstance.getTicketDetails(ticketId).then((ticketData) => {
       var ticketJson = {
         'id': ticketId,
-        'event': ticketData[0],
-        'price': web3.fromWei(ticketData[1])
+        'artist': ticketData[0],
+        'name': web3.toAscii(ticketData[1]).replace(/\0.*$/g,''),
+        'location': web3.toAscii(ticketData[2]).replace(/\0.*$/g,''),
+        'price': web3.fromWei(ticketData[3]),
+        'time': ticketData[4]
       };
       loadTicket(
         ticketJson.id,
-        ticketJson.event,
-        ticketJson.price
+        ticketJson.name,
+        ticketJson.location,
+        ticketJson.price,
+        ticketJson.time,
+        ticketJson.artist
       );
     }).catch((err) => {
       console.log(err.message);
